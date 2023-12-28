@@ -19,7 +19,7 @@ public class FileService {
             String satir;
             int i = 1;
             while ((satir = br.readLine()) != null) {
-
+     
                 String[] veriler = satir.split(", ");
                 Process process = new Process(veriler,color.getRandomColor());
                 process.setId(i);

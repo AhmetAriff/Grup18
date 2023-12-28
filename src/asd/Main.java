@@ -9,6 +9,10 @@ public class Main {
 		System.out.println("usta deneme");
 		System.out.println("usta deneme");
 		System.out.println("usta deneme");
+		
+		Color color = new Color();
+
+	    FileService fileService = new FileService("giris.txt",color);
 	}
 
 }
