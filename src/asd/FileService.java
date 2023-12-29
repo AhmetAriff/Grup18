@@ -17,7 +17,7 @@ public class FileService {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String satir;
-            int i = 1;
+            int i = 0;
             while ((satir = br.readLine()) != null) {
      
                 String[] veriler = satir.split(", ");

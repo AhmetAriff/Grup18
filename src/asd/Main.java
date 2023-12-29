@@ -6,7 +6,7 @@ public class Main {
 		
 		Color color = new Color();
 
-	    FileService fileService = new FileService("giris.txt",color);
+	    FileService fileService = new FileService(args[0],color);
 	    
 	    ModemService modemService = new ModemService();
 	       YaziciService yaziciService = new YaziciService();
