@@ -1,6 +1,10 @@
 package asd;
 
 public class MemoryService {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 537edf65185ffaef5e192556b904ac3d647f309c
 	MemoryService(){
         memory = new int[1024];
         for(int i = 0;i<1024;i++){
@@ -12,6 +16,7 @@ public class MemoryService {
     private final int  maximumMemoryKapasitesiForRealTime = 64;
 
     public boolean memoryMusaitMi(Process process) {
+<<<<<<< HEAD
         return getBestFitIndex(process) != -1;
     }
 
@@ -77,4 +82,9 @@ public class MemoryService {
             return maximumMemoryKapasitesiForRealTime;
         else
             return maximumMemoryKapasitesiForUserJob;}
+=======
+        return getBestFitIndex(process) != -1;
+    }
+
+>>>>>>> 537edf65185ffaef5e192556b904ac3d647f309c
 }
