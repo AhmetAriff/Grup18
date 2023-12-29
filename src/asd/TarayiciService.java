@@ -19,7 +19,5 @@ public class TarayiciService {
 
     public void tarayiciyiSerbestBirak(Process process){
         kullanimdakiTarayiciSayisi -= process.gettarayicilar();
-    }
-
-
+    }
 }

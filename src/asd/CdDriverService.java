@@ -19,6 +19,5 @@ public class CdDriverService {
 
     public void cdDriveriSerbestBirak(Process process){
         kullanimdakiCdDriverSayisi -=process.getCdDrivers();
-    }
-
+    }
 }

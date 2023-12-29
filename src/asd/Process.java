@@ -1,7 +1,8 @@
 package asd;
 
 public class Process {
-	private int id;
+
+    private int id;
     private int varışZamani;
     private int kuyrugaGirisZamani; // user job için mi yoksa multilevel için mi yazacağını düşün
     private int processCalismaZamani = 0; // processin ne kadarı çalıştı tutmak için
@@ -13,6 +14,8 @@ public class Process {
     private int modems;
     private int cdDrivers;
     private final String color;
+
+    private String processDurumu;
 
     private int hafızadakiBaslangicAdresi;
 
@@ -129,4 +132,21 @@ public class Process {
     public void setHafızadakiBaslangicAdresi(int hafızadakiBaslangicAdresi) {
         this.hafızadakiBaslangicAdresi = hafızadakiBaslangicAdresi;
     }
+
+    public int getVarışZamani() {
+        return varışZamani;
+    }
+
+    public void setVarışZamani(int varışZamani) {
+        this.varışZamani = varışZamani;
+    }
+
+    public String getProcessDurumu() {
+        return processDurumu;
+    }
+
+    public void setProcessDurumu(String processDurumu) {
+        this.processDurumu = processDurumu;
+    }
 }
+
