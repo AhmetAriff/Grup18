@@ -2,7 +2,7 @@ package asd;
 
 public class ProcessService {
 
-    public void runProcessForOneSecond(Process process){
+	public void runProcessForOneSecond(Process process){
         int processCalismaZamani = process.getprocessCalismaZamani();
         processCalismaZamani++; // 1 birim çalıştırıldı
         process.setprocessCalismaZamani(processCalismaZamani);
@@ -20,21 +20,24 @@ public class ProcessService {
     }
 
     public void durumYazdir(Process process){
-        System.out.println(process.getColor() + process.getVarışZamani() + "\t\t" + process.getPriority() + "\t\t" + process.getMbayt() + "\t\t" + process.getyazicilar() + "\t\t" + process.gettarayicilar() + "\t\t" + process.getModems() + "\t\t"+ process.getCdDrivers() + "\t\t" + process.getProcessDurumu());
+        System.out.println(process.getColor() + process.getId() + "\t\t" + process.getVarışZamani() + "\t\t" + process.getPriority() + "\t\t" + process.getMbayt() + "\t\t" + process.getyazicilar() + "\t\t" + process.gettarayicilar() + "\t\t" + process.getModems() + "\t\t"+ process.getCdDrivers() + "\t\t" + process.getProcessDurumu());
     }
 
-    public void cokSayidaKaynakHatasiazdir(Process process){
-        System.out.println("HATA   Prcess çok sayıda kaynak talep ediyor - process silindi");
+    public void cokSayidaKaynakHatasiYazdir(Process process){
+        System.out.println(process.getId() + "\tHATA   Prcess çok sayıda kaynak talep ediyor - process silindi");
     }
 
     public void realTimeHafizaHatasiYazdir(Process process){
-        System.out.println("Hata Gerçek zamanlı process (64mb) dan fazla hazfıza talep ediyor - process silindi");
+        System.out.println(process.getId() +"\tHata Gerçek zamanlı process (64mb) dan fazla hazfıza talep ediyor - process silindi");
     }
 
     public void userJobHafizaHatasiYazdir(Process process){
-        System.out.println("Hata  process (960mb) dan fazla hazfıza talep ediyor - process silindi");
+        System.out.println(process.getId() + "\tHata  process (960mb) dan fazla hazfıza talep ediyor - process silindi");
     }
 
+    public void zamanAşimiHatasiYazdir(Process process){
+        System.out.println(process.getId() + "\tHATA process zaman aşımı (20 snde tamamlanamadı)");
+    }
 
 }
 

@@ -1,14 +1,15 @@
 package asd;
 
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class Dispatcher {
 
-    private final LinkedList<Process> processList;
-    private final LinkedList<Process> realTimeQueue;
-    private final LinkedList<Process> priority1Queue;
-    private final LinkedList<Process> priority2Queue;
-    private final LinkedList<Process> priority3Queue;
+	private final Queue<Process> processList;
+    private final Queue<Process> realTimeQueue;
+    private final Queue<Process> priority1Queue;
+    private final Queue<Process> priority2Queue;
+    private final Queue<Process> priority3Queue;
     private final LinkedList<Process> userJobQueue;
     private final ModemService modemService;
     private final YaziciService yaziciService;
@@ -42,8 +43,9 @@ public class Dispatcher {
     }
         //TODO  process time out hatasını çöz
     public void programiBaslat(){
+        System.out.println("Pid" + "\t varış" + "\t  öncelik" +"\tMBytes" +"\tprn" + "\t\tscn"+"\t modem" + "\t\tcd" + "\t\tstatus");
         while(!tümProcesslerTamamlandiMi()){
-            //processesTimeOut(); // üzerine biraz daha düşün
+            processZamanAsimi(); // üzerine biraz daha düşün
             while(true){
               Process process =  processList.peek();
 
@@ -61,6 +63,15 @@ public class Dispatcher {
                         allocateProcessResources(process);
                         process.setkuyrugaGirisZamani(counter);
                     }
+                    else{
+                        if(process.getMbayt() > 64)
+                        {
+                            processService.realTimeHafizaHatasiYazdir(process);
+                        }
+                        else{
+                            processService.cokSayidaKaynakHatasiYazdir(process);
+                        }
+                    }
                 }
                 else{
                     userJobQueue.add(process);
@@ -77,7 +88,7 @@ public class Dispatcher {
                         processService.userJobHafizaHatasiYazdir(process);
                     }
                     else{
-                        processService.cokSayidaKaynakHatasiazdir(process);
+                        processService.cokSayidaKaynakHatasiYazdir(process);
                     }
                 }
                 else if(processKaynaklariMusaitMi(process)){ // processin kaynak gerkesinimleri sistemde şuan mevcut mu
@@ -151,6 +162,8 @@ public class Dispatcher {
                 }
             }
             counter ++;  // en son counteri arttıracam
+
+            //processZamanAsimi();
         }
     }
 
@@ -205,11 +218,42 @@ public class Dispatcher {
         cdDriverService.cdDriveriKullan(process);
     }
 
-    private void processesTimeOut() {
-        realTimeQueue.removeIf(process -> processService.isProcessTimeOutExceeded(process, counter));
-        priority1Queue.removeIf(process -> processService.isProcessTimeOutExceeded(process, counter));
-        priority2Queue.removeIf(process -> processService.isProcessTimeOutExceeded(process, counter));
-        priority3Queue.removeIf(process -> processService.isProcessTimeOutExceeded(process, counter));
+    private void processZamanAsimi() {
+        realTimeQueue.removeIf(process -> {
+            if (processService.isProcessTimeOutExceeded(process, counter)) {
+                processService.zamanAşimiHatasiYazdir(process);
+                return true;  
+            }
+            return false;  
+        });
+        priority1Queue.removeIf(process -> {
+            if (processService.isProcessTimeOutExceeded(process, counter)) {
+                processService.zamanAşimiHatasiYazdir(process);
+                return true;  
+            }
+            return false;  
+        });
+        priority2Queue.removeIf(process -> {
+            if (processService.isProcessTimeOutExceeded(process, counter)) {
+                processService.zamanAşimiHatasiYazdir(process);
+                return true;  
+            }
+            return false;  
+        });
+        priority3Queue.removeIf(process -> {
+            if (processService.isProcessTimeOutExceeded(process, counter)) {
+                processService.zamanAşimiHatasiYazdir(process);
+                return true;  
+            }
+            return false;  
+        });
+        userJobQueue.removeIf(process -> {
+            if (processService.isProcessTimeOutExceeded(process, counter)) {
+                processService.zamanAşimiHatasiYazdir(process);
+                return true;  
+            }
+            return false;  
+        });
     }
 
 
@@ -238,3 +282,4 @@ public class Dispatcher {
                 && process.getMbayt() <= memoryService.getMaximumMemoryKapasitesi(process);
     }
 }
+
