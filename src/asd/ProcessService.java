@@ -20,23 +20,23 @@ public class ProcessService {
     }
 
     public void durumYazdir(Process process){
-        System.out.println(process.getColor() + process.getId() + "\t\t" + process.getVarışZamani() + "\t\t" + process.getPriority() + "\t\t" + process.getMbayt() + "\t\t" + process.getyazicilar() + "\t\t" + process.gettarayicilar() + "\t\t" + process.getModems() + "\t\t"+ process.getCdDrivers() + "\t\t" + process.getProcessDurumu());
+        System.out.println(process.getColor() + "    " +process.getId() + "\t    " + process.getVarışZamani() + "\t\t" + process.getPriority() + "\t  " + process.getMbayt() + "\t   " + process.getyazicilar() + "\t\t" + process.gettarayicilar() + "\t   " + process.getModems() + "\t  "+ process.getCdDrivers() + "\t" + process.getProcessDurumu());
     }
 
     public void cokSayidaKaynakHatasiYazdir(Process process){
-        System.out.println(process.getId() + "\tHATA   Prcess çok sayıda kaynak talep ediyor - process silindi");
+        System.out.println(process.getColor() + "    " +process.getId() + "\tHATA   Process cok sayida kaynak talep ediyor - process silindi");
     }
 
     public void realTimeHafizaHatasiYazdir(Process process){
-        System.out.println(process.getId() +"\tHata Gerçek zamanlı process (64mb) dan fazla hazfıza talep ediyor - process silindi");
+        System.out.println(process.getColor() + "    " +process.getId() +"\tHATA Gercek zamanli process (64mb) dan fazla hazfiza talep ediyor - process silindi");
     }
 
     public void userJobHafizaHatasiYazdir(Process process){
-        System.out.println(process.getId() + "\tHata  process (960mb) dan fazla hazfıza talep ediyor - process silindi");
+        System.out.println(process.getColor() + "    " +process.getId() + "\tHATA  process (960mb) dan fazla hazfiza talep ediyor - process silindi");
     }
 
     public void zamanAşimiHatasiYazdir(Process process){
-        System.out.println(process.getId() + "\tHATA process zaman aşımı (20 snde tamamlanamadı)");
+        System.out.println(process.getColor() + "    " +process.getId() + "\tHATA process zaman asimi (20 snde tamamlanamadi)");
     }
 
 }

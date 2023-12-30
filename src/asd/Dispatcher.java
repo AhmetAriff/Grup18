@@ -43,7 +43,7 @@ public class Dispatcher {
     }
         //TODO  process time out hatasını çöz
     public void programiBaslat(){
-        System.out.println("Pid" + "\t varış" + "\t  öncelik" +"\tMBytes" +"\tprn" + "\t\tscn"+"\t modem" + "\t\tcd" + "\t\tstatus");
+    	basligiYaz();
         while(!tümProcesslerTamamlandiMi()){
             processZamanAsimi(); // üzerine biraz daha düşün
             while(true){
@@ -104,13 +104,11 @@ public class Dispatcher {
 
             if(!realTimeQueue.isEmpty()){
                 Process firstComeProcess = realTimeQueue.peek();
-                processService.runProcessForOneSecond(firstComeProcess); // processi bir saniye işlet;
-                /*processService.yazdirDeneme(firstComeProcess.getColor(),firstComeProcess.getId(),counter,"process real time kuyrukda 1 saniye calisti");*/
+                processService.runProcessForOneSecond(firstComeProcess); // processi bir saniye işlet; 
                 firstComeProcess.setProcessDurumu("RUNNNING");
                 processService.durumYazdir(firstComeProcess);
 
                 if(processService.isProcessFinished(firstComeProcess)){
-                    /*processService.yazdirDeneme(firstComeProcess.getColor(),firstComeProcess.getId(),counter,"process real timeda bitti ve atıldı");*/
                     firstComeProcess.setProcessDurumu("COMPLETED");
                     processService.durumYazdir(firstComeProcess);
                     Process process = realTimeQueue.remove(); // bittiyse yolla
@@ -189,15 +187,12 @@ public class Dispatcher {
         int priority = process.getPriority();
          if (priority == 1){
              priority1Queue.add(process);
-             processService.yazdirDeneme(process.getColor(),process.getId(),counter,"process 1.öncelik kuyruğuna girdi");
          }
         else if (priority == 2){
-             priority2Queue.add(process);
-             processService.yazdirDeneme(process.getColor(),process.getId(),counter,"process 2.öncelik kuyruğuna girdi");
+             priority2Queue.add(process); 
          }
         else{
              priority3Queue.add(process);
-             processService.yazdirDeneme(process.getColor(),process.getId(),counter,"process 3.öncelik kuyruğuna girdi");
          }
         process.setkuyrugaGirisZamani(counter); // process kuyruğa ne zaman girdi
     }
@@ -222,6 +217,7 @@ public class Dispatcher {
         realTimeQueue.removeIf(process -> {
             if (processService.isProcessTimeOutExceeded(process, counter)) {
                 processService.zamanAşimiHatasiYazdir(process);
+                kaynaklariSerbestBirak(process);
                 return true;  
             }
             return false;  
@@ -229,6 +225,7 @@ public class Dispatcher {
         priority1Queue.removeIf(process -> {
             if (processService.isProcessTimeOutExceeded(process, counter)) {
                 processService.zamanAşimiHatasiYazdir(process);
+                kaynaklariSerbestBirak(process);
                 return true;  
             }
             return false;  
@@ -236,6 +233,7 @@ public class Dispatcher {
         priority2Queue.removeIf(process -> {
             if (processService.isProcessTimeOutExceeded(process, counter)) {
                 processService.zamanAşimiHatasiYazdir(process);
+                kaynaklariSerbestBirak(process);
                 return true;  
             }
             return false;  
@@ -243,6 +241,7 @@ public class Dispatcher {
         priority3Queue.removeIf(process -> {
             if (processService.isProcessTimeOutExceeded(process, counter)) {
                 processService.zamanAşimiHatasiYazdir(process);
+                kaynaklariSerbestBirak(process);
                 return true;  
             }
             return false;  
@@ -250,6 +249,7 @@ public class Dispatcher {
         userJobQueue.removeIf(process -> {
             if (processService.isProcessTimeOutExceeded(process, counter)) {
                 processService.zamanAşimiHatasiYazdir(process);
+                kaynaklariSerbestBirak(process);
                 return true;  
             }
             return false;  
@@ -260,17 +260,22 @@ public class Dispatcher {
     // round robinde kuyruğun başındaki processi işletip tekrar kuyruğa sokmalıyız
     private void askıyaAl(){
         if(!priority1Queue.isEmpty()){
-            // düşün bunu bu zaten askıya alındı 1 saniye daha çalıştırma muhabbeti ödev dökümanındaki incele
+        	 Process process = priority1Queue.peek();
+        	 process.setProcessDurumu("ASKIYA ALINDI");
+             processService.durumYazdir(process);
         }
         else if(! priority2Queue.isEmpty()){
             Process process = priority2Queue.remove();  // 2.öncelikteli process kesme yedi 1.önceliğe attım
             priority1Queue.add(process);
-            processService.yazdirDeneme(process.getColor(),process.getId(),counter,"process 2.öncelikten 1.önceliğe askıya alındı");
+            //processService.yazdirDeneme(process.getColor(),process.getId(),counter,"process 2.öncelikten 1.önceliğe askıya alındı");
+            process.setProcessDurumu("ASKIYA ALINDI");
+            processService.durumYazdir(process);
         }
         else if(!priority3Queue.isEmpty()){
             Process process = priority3Queue.remove();  // 3.öncelikteli process kesme yedi 2.önceliğe attım
             priority2Queue.add(process);
-            processService.yazdirDeneme(process.getColor(),process.getId(),counter,"process 3.öncelikten 2.önceliğe askıya alındı");
+            process.setProcessDurumu("ASKIYA ALINDI");
+            processService.durumYazdir(process);
         }
     }
 
@@ -280,6 +285,10 @@ public class Dispatcher {
                 && process.getModems() <= modemService.getsistemdekiModemSayisi()
                 && process.getCdDrivers() <= cdDriverService.getsystemCdDriverSayisi()
                 && process.getMbayt() <= memoryService.getMaximumMemoryKapasitesi(process);
+    }
+    private void basligiYaz(){
+        System.out.println("\t  Pid" + "     varis" + "     oncelik" +"     MBytes" +"     prn" + "        scn"+"       modem" + "     cd" + "    status");
+        System.out.println("-----------------------------------------------------------------------");
     }
 }
 
