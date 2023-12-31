@@ -20,7 +20,6 @@ public class Color {
         int rnd;
         do{
             if(colorList.size()== colors.length){
-                //yukarıdaki dizi sayisindan fazla proses varsa mecburen herhangi bir prosese atanmış olan color yeni prosese de atanacaktır.
                 rnd = new Random().nextInt(colors.length);
                 return colors[rnd];
             }

@@ -41,18 +41,17 @@ public class Dispatcher {
         this.cdDriverService = cdDriverService;
         this.processService = processService;
     }
-        //TODO  process time out hatasını çöz
     public void programiBaslat(){
     	basligiYaz();
         while(!tümProcesslerTamamlandiMi()){
-            processZamanAsimi(); // üzerine biraz daha düşün
+            processZamanAsimi();
             while(true){
               Process process =  processList.peek();
 
                 if( process == null || process.getvarışZamani() > counter ){
-                  break;
+                  break; // process listtin en önündeki processin zamanı henüz gelmemişse
                 }
-                if(process.getPriority() == 0){
+                if(process.getPriority() == 0){ // process realtime ise
                     if(realTimeQueue.isEmpty()){
                         askıyaAl();
                     }
@@ -97,9 +96,6 @@ public class Dispatcher {
                     userJobQueue.remove(process);// process listesinden kaldır
                     i++;
                 }
-                /*else{
-                    processService.yazdirDeneme(process.getColor(),process.getId(),counter,"proces sistemde yeterli kaynak olmadıgı için bekliyor");
-                }*/
             }
 
             if(!realTimeQueue.isEmpty()){
@@ -213,7 +209,7 @@ public class Dispatcher {
         cdDriverService.cdDriveriKullan(process);
     }
 
-    private void processZamanAsimi() {
+    private void processZamanAsimi() { // gerekli yerleri dolaşıp 20 saniyeden fazla sistemde duran process varsa sistemden çıkar ve hata mesajı yazdır
         realTimeQueue.removeIf(process -> {
             if (processService.isProcessTimeOutExceeded(process, counter)) {
                 processService.zamanAşimiHatasiYazdir(process);
@@ -256,8 +252,6 @@ public class Dispatcher {
         });
     }
 
-
-    // round robinde kuyruğun başındaki processi işletip tekrar kuyruğa sokmalıyız
     private void askıyaAl(){
         if(!priority1Queue.isEmpty()){
         	 Process process = priority1Queue.peek();
@@ -267,7 +261,6 @@ public class Dispatcher {
         else if(! priority2Queue.isEmpty()){
             Process process = priority2Queue.remove();  // 2.öncelikteli process kesme yedi 1.önceliğe attım
             priority1Queue.add(process);
-            //processService.yazdirDeneme(process.getColor(),process.getId(),counter,"process 2.öncelikten 1.önceliğe askıya alındı");
             process.setProcessDurumu("ASKIYA ALINDI");
             processService.durumYazdir(process);
         }
@@ -288,7 +281,7 @@ public class Dispatcher {
     }
     private void basligiYaz(){
         System.out.println("\t  Pid" + "     varis" + "     oncelik" +"     MBytes" +"     prn" + "        scn"+"       modem" + "     cd" + "    status");
-        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------------------------------");
     }
 }
 

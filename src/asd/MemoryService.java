@@ -36,11 +36,11 @@ public class MemoryService {
         boolean memoryTamamenBosMu = true;
 
         if(process.getPriority() == 0){
-            programiBaslatIndex = 0;
+            programiBaslatIndex = 0; // real time icin 0 - 63 arası tathsis edilir
             length = 64;
         }
         else{
-            programiBaslatIndex = 64;
+            programiBaslatIndex = 64; // user job için 64 - 1023 arası tahsis edilir
             length = 1024;
         }
         for (int i=programiBaslatIndex;i<length;i++){
